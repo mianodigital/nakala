@@ -2,7 +2,6 @@ import os
 import openai
 import argparse
 import re
-from typing import List
 
 MAX_INPUT_LENGTH = 48
 
@@ -16,7 +15,7 @@ def main():
   # Output the user input
   print(f'User input: {user_input}')
   if validate_length(user_input):
-    generate_branding_snippet(user_input)
+    generate_snippet(user_input)
     generate_keywords(user_input)
   else:
     raise ValueError(
@@ -25,6 +24,9 @@ def main():
 # Checks the length of the user input 
 def validate_length(prompt: str):
   return len(prompt) <= MAX_INPUT_LENGTH
+
+def phrase_length(prompt: str):
+  return len(prompt)
   
   
  
@@ -39,7 +41,7 @@ def generate_keywords(prompt: str):
   )
   keywords_text: str = response['choices'][0]['text']
   keywords_text = keywords_text.strip()
-  keywords_array = re.split(', | \n | * | - | ;', keywords_text)
+  keywords_array = re.split(',|\n|-|;', keywords_text)
   keywords_array = [k.lower().strip() for k in keywords_array]
   keywords_array = [k for k in keywords_array if len(k) > 0]
   
@@ -48,12 +50,12 @@ def generate_keywords(prompt: str):
   return keywords_array
 
 
-def generate_branding_snippet(prompt: str):
+def generate_snippet(prompt: str):
 
   openai.api_key = os.getenv('OPENAI_API_KEY')
   openai.organization = 'org-bvCghBdftRDnvFLBdwm7n449'
 
-  enriched_prompt = f'Generate upbeat branding snippet for {prompt}: '
+  enriched_prompt = f'Generate branding snippet for {prompt}: '
   print(enriched_prompt)
   
   response = openai.Completion.create(
@@ -62,7 +64,7 @@ def generate_branding_snippet(prompt: str):
   branding_text: str = response['choices'][0]['text']
   branding_text = branding_text.strip()
   last_char = branding_text[-1]
-  if last_char not in {'.', '!', '?'}:
+  if last_char not in {'.', '!', '?', ' '}:
     branding_text += '...'
   
   print(f'Snippet: {branding_text}')
