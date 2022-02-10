@@ -23,7 +23,7 @@ def main():
       f'Could not generate keywords and snippet from {user_input}. Please make sure your input is below {MAX_INPUT_LENGTH} characters'
     )
 # Checks the length of the user input 
-def validate_length(prompt: str) -> bool:
+def validate_length(prompt: str):
   return len(prompt) <= MAX_INPUT_LENGTH
   
   
@@ -59,11 +59,8 @@ def generate_branding_snippet(prompt: str):
   response = openai.Completion.create(
     engine='text-davinci-001', prompt=enriched_prompt, max_tokens=48
   )
-
   branding_text: str = response['choices'][0]['text']
-
   branding_text = branding_text.strip()
-
   last_char = branding_text[-1]
   if last_char not in {'.', '!', '?'}:
     branding_text += '...'
