@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from nakala import generate_keywords, generate_snippet, phrase_length
 
 app = FastAPI()
-MAX_PHRASE_LENGTH = 48
+MAX_PHRASE_LENGTH = 49
 
 
 @app.get('/generate_snippet')
